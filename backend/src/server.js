@@ -9,12 +9,15 @@ const PORT = process.env.PORT || 5000;
 // Middleware
 app.use(express.json())
 
-
+// Home Route
 app.get("/", (req, res)=>{
-res.send("Backend RESTFull APIS is Running")
+res.status(200).json({
+    success:true,
+    message:"Task Backend API Running"
+})
 })
 
-// task route
+// tasks route
 app.use("/api/tasks", router)
 
 app.listen(PORT, ()=>{
