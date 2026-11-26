@@ -1,6 +1,6 @@
 import Tasks from "../data/task.js";
 
-// Get All Tasks
+// Get All Tasks : api/tasks
 export const getAllTasks = async (req, res) => {
   try {
     const totalTasks = Tasks.length;
@@ -17,7 +17,7 @@ export const getAllTasks = async (req, res) => {
   }
 };
 
-//  Create a Task
+//  Create a Task : api/tasks
 export const createTask = async (req, res) => {
   try {
     const { id, title, description } = req.body;
@@ -72,7 +72,7 @@ export const createTask = async (req, res) => {
   }
 };
 
-// Update a Task
+// Update a Task : api/tasks/:id
 export const updateTask = async (req, res)=>{
   try {
     // get id from url and its Convert it Number
@@ -136,7 +136,7 @@ export const updateTask = async (req, res)=>{
   }
 }
 
-// Delete A Task using ID
+// Delete A Task using ID : api/tasks/:id
 export const deleteTask = async (req, res)=>{
   try {
     // Delete Task id take form Url and convert it into Number
@@ -173,6 +173,45 @@ export const deleteTask = async (req, res)=>{
     res.status(500).json({
       success: false,
       message: "Task Deleting Internal Server Error",
+    });
+    console.log(error.message);
+  }
+}
+
+// Get Single Task using ID : api/tasks/:id
+export const getSingleTask = async (req,res)=>{
+  try {
+    // get id from url and its Convert it Number
+    const id = Number(req.params.id);
+
+    // check id is valid
+    if (typeof id !== "number" || id <= 0) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid Task ID",
+      });
+    }
+
+    // find ID from Tasks
+    const singleTaskId = Tasks.find((task) => task.id === id);
+
+    // If id Not Found in Tasks
+    if (!singleTaskId) {
+      return res.status(404).json({
+        success: false,
+        message: "Task Not Found",
+      });
+    }
+
+    res.status(200).json({
+      success:true,
+      task: singleTaskId
+    })
+
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Task Getting Internal Server Error",
     });
     console.log(error.message);
   }
